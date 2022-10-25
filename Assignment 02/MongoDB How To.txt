@@ -1,0 +1,9 @@
+INSTRUCTIONS TO RUN MONGODB
+
+Open CMD:
+	>mongod
+	
+DO NOT CLOSE CMD WINDOW.
+	
+New CMD window:
+	>mongo
