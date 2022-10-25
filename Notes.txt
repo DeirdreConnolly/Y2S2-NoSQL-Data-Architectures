@@ -1,0 +1,141 @@
+-- LAB 01
+
+How to identify an entity type from a problem spec?
+Nouns - have at least one non-PK property to describe it.
+eg: price will NOT be an entity type because it is only a number.
+
+
+Each adacemic staff must teach at least one course.
+	academic staff - staffID, name, address, etc
+	course - courseID, name, duration,  etc
+
+	
+How to identify a relationship from a problem spec?
+Verbs - stick with the verbs in the problem spec as much as you can.
+Teach is the relationship
+Each - means 1
+At least one - means 1..*
+
+How to identify an attribute from a problem spec?
+Nouns - do not have any additional properties to describe it.
+eg: price
+Address - how do you represent it?
+	1. A single string as an attribute.
+	2. A composite attribute (can be broken down into small attributes)
+	3. An entity type
+	
+	1+2 mean one staff must have only one address
+	3 means one staff has at least one address
+	
+	If the noun has a composite PK, and no additional properties, in this case, this noun will be an entity type.
+	The composite PK will de degraded as a normal FK, and we will assign a surrogate key as a PK for this noun.
+	I create and entity type called allocation.
+	The allocation only has staffID and courseID.
+		allocation(staffID, courseID)				PK: [staffID, courseID]
+		allocation(allocID, staffID, courseID)		PK: allocID					FK: staffID, courseID
+
+
+In the ER diagram, you must remove all many-to-many relationships by introducing an additional entity type.
+This additional entity type is called associative entity type.
+Allocation entity tyoe is an example.
+In your ER diagram, you only can have one-to-one, or one-to-many unary/binary relationships.
+
+		
+Always start with conceptual diagram.
+Use conceptual modelling diagram (yellow-green boxes).
+Conceptual diagram is always smaller than ER diagram.
+
+
+
+-- Lecture 04/02/2019
+Scale up/down/out
+
+RDBMS == distributed system
+
+
+
+-- LAB 02
+
+All to be done in two pages.
+
+Abstract:
+	The gist of the full report/paper.
+	One sentence for general problem that you want to solve (why you need to compare MongoDB vs RDBMS).
+	One sentence for your strategy (how).
+	One sentence for your experiment result.
+	One sentence for conclusion.
+	
+Introduction:
+	Three paragraphs.
+	First: States the problem in more detail.
+	Second: States the strategy/main theme of report in more detail.
+	Third: Outlines the structure of the full report. 
+	
+Case Study:
+	You can have subsections (diagrams, tables, details, etc, YOU CAN ONLY HAVE THEM HERE).
+	Do not plagiarise Jing's notes, it must be in your own words.
+	
+Conclusion:
+	Summarise  the full report. 
+	
+Formal writing:
+	Do not start your sentence with "I/you/he/she", use "it/we".
+	Most sentences are passive (eg: "My assignment was finished." [passive] vs "I finished my assignment." [non-passive]).
+	
+Submit:
+	One doc containing screenshots of queries.
+	One doc containing report.
+	
+References:
+	None.
+	
+	
+	
+----
+
+
+
+-- MySQL
+
+Normalisation
+Tables/relational
+
+When you execute a SELECT statement, MySQL uses the queryoptimizer to analyze the statement and perform the query aseffectively as possibleThe optimizer tries to use indexes whenever possible to process thestatementThe optimizer tries to determine the greatest number of rows thatcan be eliminated from the searchFirst, you need to specify that MySQL should not be using its cache,so that we can accurately judge the time these tasks take to complete:SET GLOBAL query cache size = 0;SHOW VARIABLES LIKE "querycachesize" ;		-- 54/80
+
+EXPLAIN StatementThe EXPLAIN statement provides an analysis of a specified SELECTstatementThe EXPLAIN statement also shows how MySQL query optimizerdecides to execute the queryThe syntax of EXPLAIN statement:		-- 55/80
+
+Do not use unnecessary wild-cards in LIKE clauseIsolate indexed columns in comparison expressions.  MySQL cannotuse an index on a column if that column appears as an argument in afunction or an arithmetic expressionTurn subqueries in to joins.  MySQL processes joins more efficientlythan subqueriesTry using the USE INDEX clause or FORCE INDEX clause on thequery			-- 58/80
+
+There are three main types of index in MySQL:BTree IndexesRTree IndexesHash Indexes		-- 60/80
+
+Primary key is a primary index in mysql		-- 61/80
+
+In MySQL, the most useful step that you can take to maximizeperformance is to ensure that your tables are properly indexed.Index columns that appear in search conditionsIndex columns that appear in join conditionsDo not index columns that appear only in SELECT clauseDo not index columns that contain only a few different valuesSpecify prefixes for indexes on columns that contain large string values		-- 64/80
+
+Transactions -- 65/80
+
+Flexibility for applications to retrieve data quicklyUsing transactions to control concurrent data access.  Withtransactions, you can make a change, and if an error occurs duringthe processing of the change you can roll back the transaction toclean things up.Shared database integration - multiple applications store their data ina single database.It’s a (mostly) standard model.		-- 80/80
+
+
+
+
+
+
+
+-- MongoDB
+
+	
+	
+	
+
+	
+	
+	
+-- DATA STORAGE
+
+Building a Distributed Storage and Compute CloudBig data refers to a huge volume of data that cannot be stored andprocessed with a traditional approach within a given time frame.  Itcomprises data sets growing so large that they become cumbersome tomanipulate using traditional database management tools or traditionaldata processing applications (to store, to retrieve, to compute, . . . )		-- 24/50
+
+
+	
+	
+	

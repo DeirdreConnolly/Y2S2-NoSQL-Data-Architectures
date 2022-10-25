@@ -1,0 +1,256 @@
+/* PART 2 */
+
+// Q1. Create nodes for three chefs/cooks.
+
+CREATE 
+
+	(gordon:Chef { name: 'Gordon Ramsay', title: 'Chef' }),
+	(alton:Chef { name: 'Alton Brown', title: 'Chef' }),
+	(mary:Chef { name: 'Mary Berry', title: 'Chef' })
+
+
+CREATE
+
+  // Pound Cake
+  (poundCake:Cake {name: "Pound Cake"}),
+  (poundCake)-[:CONTAINS {quantity: 400, unit: "grams"}]->(selfraising),
+  (poundCake)-[:CONTAINS {quantity: .5, unit: "grams"}]->(salt),
+  (poundCake)-[:CONTAINS {quantity: 160, unit: "grams"}]->(sugar),
+  (poundCake)-[:CONTAINS {quantity: 300, unit: "grams"}]->(milk),
+  (poundCake)-[:CONTAINS {quantity: 4, unit: "grams"}]->(egg),
+  (poundCake)-[:GARNISHED_WITH {how: "poured on top"} ]->(cream),
+
+  
+  // Pancakes
+  (pancakes:Cake {name: "Pancakes"}),
+  (pancakes)-[:CONTAINS {quantity: 100, unit: "grams"}]->(white),
+  (pancakes)-[:CONTAINS {quantity: 150, unit: "grams"}]->(brown),
+  (pancakes)-[:CONTAINS {quantity: .5, unit: "grams"}]->(salt),
+  (pancakes)-[:CONTAINS {quantity: 80, unit: "grams"}]->(sugar),
+  (pancakes)-[:CONTAINS {quantity: 300, unit: "grams"}]->(milk),
+  (pancakes)-[:CONTAINS {quantity: 1, unit: "grams"}]->(egg),
+  (pancakes)-[:GARNISHED_WITH {how: "sprinkled on top"} ]->(sugar),
+  
+  
+  // Lemon Cake
+  (lemonCake:Cake {name: "Lemon Cake"}),
+  (lemonCake)-[:CONTAINS {quantity: 250, unit: "grams"}]->(selfraising),
+  (lemonCake)-[:CONTAINS {quantity: 80, unit: "grams"}]->(margarine),
+  (lemonCake)-[:CONTAINS {quantity: .5, unit: "grams"}]->(salt),
+  (lemonCake)-[:CONTAINS {quantity: 125, unit: "grams"}]->(sugar),
+  (lemonCake)-[:CONTAINS {quantity: 100, unit: "grams"}]->(currants),
+  (lemonCake)-[:CONTAINS {quantity: 100, unit: "grams"}]->(sultanas),
+  (lemonCake)-[:CONTAINS {quantity: 25, unit: "grams"}]->(brandy),
+  (lemonCake)-[:CONTAINS {quantity: 3, unit: "grams"}]->(lemon),
+  (lemonCake)-[:CONTAINS {quantity: .5, unit: "grams"}]->(mixedspice)
+  
+  
+  
+  
+  
+ match (a:chief), (b:Cake) where a.name = "David" and b.name = "EggCake" 
+create (a)-[r:OWNS{popularity:60}]->(b) return a,b;
+
+
+
+
+
+
+  
+MATCH (gordon:Chef),(poundCake:Cake)
+WHERE gordon.name = 'Gordon Ramsay' AND poundCake.name = 'Pound Cake'
+CREATE (gordon)-[r:MAKES {Popularity : 6}]->(poundCake)
+RETURN gordon, poundCake;
+  
+
+MATCH (alton:Chef),(pancakes:Cake)
+WHERE alton.name = 'Alton Brown' AND pancakes.name = 'Pancakes'
+CREATE (alton)-[r:MAKES {Popularity : 9}]->(pancakes)
+RETURN alton, pancakes;
+  
+  
+MATCH (mary:Chef),(lemonCake:Cake)
+WHERE mary.name = 'Mary Berry' AND lemonCake.name = 'Lemon Cake'
+CREATE (mary)-[r:MAKES {Popularity : 7}]->(lemonCake)
+RETURN mary, lemonCake;
+
+
+
+
+MATCH (gordon{name: 'Gordon Ramsay'})-[r:MAKES]->()
+DELETE r
+
+RETURN type(r), r.makes
+
+
+
+
+MATCH (gordon:Chef),(fruitCake:Cake)
+WHERE gordon.name = 'Gordon Ramsay' AND fruitCake.name = 'Christmas Cake'
+CREATE (gordon)-[r:MAKES {Used : 40}]->(fruitCake)
+RETURN gordon, fruitCake;
+
+
+
+MATCH (gordon:Chef),(scones:Cake)
+WHERE gordon.name = 'Gordon Ramsay' AND scones.name = 'Scones'
+CREATE (gordon)-[r:MAKES {Used : 150}]->(scones)
+RETURN gordon, scones;
+
+
+MATCH (alton:Chef),(brownies:Cake)
+WHERE alton.name = 'Alton Brown' AND brownies.name = 'Brownies'
+CREATE (alton)-[r:MAKES {Used : 210}]->(brownies)
+RETURN alton, brownies;
+
+
+MATCH (alton:Chef),(brownscones:Cake)
+WHERE alton.name = 'Alton Brown' AND brownscones.name = 'Brown Scones'
+CREATE (alton)-[r:MAKES {Used : 210}]->(brownscones)
+RETURN alton, brownscones;
+  
+  
+MATCH (mary:Chef),(applescones:Cake)
+WHERE mary.name = 'Mary Berry' AND applescones.name = 'Apple Scones'
+CREATE (mary)-[r:MAKES {Used : 90}]->(applescones)
+RETURN mary, applescones;
+
+
+MATCH (mary:Chef),(bmousse:Cake)
+WHERE mary.name = 'Mary Berry' AND bmousse.name = 'Brandy Mousse'
+CREATE (mary)-[r:MAKES {Used : 90}]->(bmousse)
+RETURN mary, bmousse;
+
+
+
+// Q2. List all of the cakes and the ingredients for each cake.
+
+MATCH (c:Cake)-[r:CONTAINS]->(i)
+RETURN c.name, i.name
+
+
+
+
+// Q3. List the ingredients in a brownie recipe.
+
+MATCH (c:Cake{name:'Brownies'})-[r:CONTAINS]->(i)
+RETURN c.name, i.name
+
+
+
+
+// Q4. List all the cakes with flour in them.
+
+MATCH (c:Cake)-[r:CONTAINS]->(i:Flour)
+RETURN c.name, i.name
+
+
+
+
+// Q5. List which Cakes have both Cream and Milk in them.
+
+MATCH (c:Cake)-[r:CONTAINS]->(i:Ingredient)
+WHERE i.name = 'cream' OR i.name = 'milk'
+RETURN c.name, i.name
+ORDER BY c.name
+
+
+
+
+// Q6. List which recipes are associated with each chef.
+
+MATCH (p:Chef)-[]->(c:Cake)
+RETURN p.name, c.name
+
+
+
+
+// Q7. What chef has the most popular recipes?
+
+MATCH (p:Chef)-[q]->()
+RETURN p.name, q.Popularity
+ORDER BY q.Popularity DESC
+
+
+
+
+// Q8. What are the 5 most useful ingredients?
+
+MATCH (c:Cake)-[r]->(i)
+RETURN count(r) AS num, i.name
+ORDER BY num DESC
+LIMIT 5
+
+
+
+
+// Q9. What are the 5 least useful ingredients?
+
+MATCH (c:Cake)-[r]->(i)
+RETURN count(r) AS num, i.name
+ORDER BY num
+LIMIT 5
+
+
+
+
+// Q10. What recipe is the most similar to apple scones - output list of ingredients from other recipes in order of similarity to this recipe?
+
+MATCH (a:Cake{name:'Apple Scones'})-[r]->(b), (c:Cake)-[d]->(e)
+WHERE b = e
+RETURN a.name, c.name, count(r) AS num
+ORDER BY num DESC
+
+
+
+
+/* PART 3 */
+
+// Q1. What kind of cuisine do New Yorkers prefer?
+
+db.restaurants.aggregate([{$project:{_id:0, cuisine:1}},{$sortByCount:"$cuisine"}]).pretty().limit(5)
+
+
+
+
+// Q2. Which area represents the biggest market opportunity for opening a new restaurant of this kind of cuisine?
+
+db.restaurants.aggregate([{$match:{cuisine:"American"}},{$project:{_id:0, cuisine:1, borough:1}},{$sortByCount:"$borough"}]).pretty()
+
+
+db.restaurants.aggregate([{$match:{cuisine:"American"}},{$project:{_id:0, cuisine:1, borough:1, zipcode:1}},{$sortByCount:"$zipcode"}]).pretty()
+
+
+
+
+// Q3. Who are the biggest competitors in this area?
+
+db.restaurants.aggregate([{$match:{cuisine:"American"}},{$project:{_id:0, cuisine:1, borough:1}},{$sortByCount:"$name"}]).pretty().
+
+
+
+
+md \data\db
+
+"C:\Program Files\MongoDB\bin\mongod.exe" --dbpath d:\test\mongodb\data
+
+"C:\Program Files\MongoDB\bin\mongod.exe" --dbpath "d:\test\mongo db data"
+
+
+mongoimport --jsonArray --db restaurantdb --collection restaurants --drop --file C:\restaurants_dataset.json
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+ 
